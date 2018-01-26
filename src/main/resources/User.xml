@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namesapce命名空间，对sql进行分类化管理，sql隔离-->
+<!--使用mappper代理方法，namespace有重要特殊作用-->
+<mapper namespace="test">
+    <!--在映射文件中配置很多sql语句-->
+    <!--通过id查询用户表的记录-->
+    <!--通过select执行数据库查询
+        id：标识映射文件中的sql，称为statement的id
+        将sql语句封装到mappedStatement对象中，所以将id称为statement的id
+        #{}表示占位符
+        #{id}:id表示接入输入的参数，参数的名称就是id
+        如果输入参数类型为简单类型，参数名可以任意，value可以为其他名称
+
+        paramterType:指定输入类型
+        resultType:指定sql的输出结果所映射的Java对象类型
+
+    -->
+    <select id="findUserByID" parameterType="int" resultType="com.sws.entity.User">
+          select * from user where id = #{id}
+    </select>
+
+    <!--根据名称查找用户
+        resultType指定单条记录对应的类型
+    -->
+    <!--${}拼接sql字符串-->
+    <!--使用${}拼接字符串，容易引起sql注入-->
+    <select id="findUserByName" parameterType="java.lang.String" resultType="com.sws.entity.User">
+        --SELECT * from user where username like #{username}
+          select * from user where name like '%${username}%'
+    </select>
+
+    <!--添加用户-->
+    <!--parameterType:指定输入的pojo类型-->
+    <insert id="insertUser" parameterType="com.sws.entity.User">
+        <!--将插入数据的主键返回，返回到用户对象中-->
+        <!--用于得到刚刚插入的主键值，只适用于自增主键
+            keyProperty:将查询到的主键设置到parameterType所设置的对象的对应属性中
+            order:执行顺序，相对于insert
+        -->
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            select last_insert_id()
+        </selectKey>
+        insert into user(id,username,birthday,sex,address) value (#{id},#{username},#{birthday},#{sex},#{address})
+
+    </insert>
+    <insert id="insertUser2" parameterType="com.sws.entity.User">
+        <!--使用mysql的uuid(),查询非自增主键
+        首先通过uuid()获得主键，设置到user对象id中
+        -->
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
+            select uuid()
+        </selectKey>
+        insert into user(id,username,birthday,sex,address) value (#{id},#{username},#{birthday},#{sex},#{address})
+
+    </insert>
+
+    <!--删除用户-->
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        delete  from user where id = #{id}
+    </delete>
+    <!--更新用户-->
+    <update id="updateUser" parameterType="java.com.sws.entity.User">
+        update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address} where id = #{id}
+    </update>
+</mapper>
