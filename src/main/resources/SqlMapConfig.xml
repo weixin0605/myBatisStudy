@@ -16,7 +16,7 @@
         <!--<typeAlias type="com.sws.entity.User" alias="User"/>-->
         <!--批量别名定义-->
         <!--指定包名，mybatis自动扫描包，自动定义别名，别名为类名-->
-        <package name="com.sws.entity">
+        <package name="com.sws.entity"/>
     </typeAliases>
 
     <environments default="development">
@@ -37,5 +37,6 @@
     <mappers>
         <mapper  resource="User.xml"/>
         <mapper resource="mapper/UserMapper.xml"/>
+        <package name="mapper"/>
     </mappers>
 </configuration>
