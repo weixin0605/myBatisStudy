@@ -4,9 +4,25 @@ import java.util.Date;
 
 public class Orders {
     private Integer id;
+
     private Integer userId;
+
+    private String number;
+
     private Date createtime;
+
     private String note;
+
+    //添加用户信息
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Integer getId() {
         return id;
@@ -22,6 +38,14 @@ public class Orders {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public Date getCreatetime() {
