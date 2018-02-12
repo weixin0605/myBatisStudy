@@ -4,6 +4,8 @@ import com.sws.entity.User;
 import com.sws.entity.UserCustom;
 import com.sws.entity.UserQueryVo;
 
+import java.util.List;
+
 public interface UserMapper {
     public User findUserByID(int id) throws Exception;
 
@@ -20,5 +22,7 @@ public interface UserMapper {
 
     //使用resultMap输出
     public User findUserByIdResultMap(int id)throws Exception;
+
+    public List<User> findUserAndItemsResultMap() throws Exception;
 
 }
