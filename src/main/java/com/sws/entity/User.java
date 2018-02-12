@@ -1,6 +1,7 @@
 package com.sws.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class User {
     //属性名与数据库相对应
@@ -10,6 +11,16 @@ public class User {
     private Date birthday;
     private String address;
 
+    public List<Orders> getOrdersList() {
+        return ordersList;
+    }
+
+    public void setOrdersList(List<Orders> ordersList) {
+        this.ordersList = ordersList;
+    }
+
+    //用户创建的订单列表
+    private List<Orders> ordersList;
     public int getId() {
         return id;
     }
