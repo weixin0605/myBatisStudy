@@ -5,4 +5,149 @@
 <!--使用mappper代理方法，namespace有重要特殊作用-->
 <mapper namespace="com.sws.mapper.OrderMapper">
 
+    <!--订单查询用户关联的resultMap
+    将整个查询结果映射到Orders中-->
+    <resultMap id="OrdersUserResultMap" type="com.sws.entity.Orders">
+        <!--配置映射订单信息-->
+        <!--id:指定查询列的唯一标示-->
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="number" property="number"/>
+        <result column="createtime" property="createtime"/>
+        <result column="note" property="note"/>
+        <!--配置映射关系的用户信息-->
+        <!--association:用于映射关系查询单个对象的信息
+        property:要将关联查询的用户信息映射到Order中的那个属性-->
+        <association property="user" javaType="com.sws.entity.User">
+            <!--id:关联查询用户的唯一标识
+            column:指定唯一标识用户信息的列
+            property:映射到user的哪个属性-->
+            <id column="user_id" property="id"/>
+            <result column="username" property="username"/>
+            <result column="sex" property="sex"/>
+            <result column="address" property="address"/>
+        </association>
+    </resultMap>
+
+    <select id="findOrdersUseresultMap" resultMap="OrdersUserResultMap">
+        select orders.*,user.username,user.sex,user.address from orders,user where orders.user_id = user.id
+    </select>
+
+    <!--&lt;!&ndash;订单及订单明细的resultMap&ndash;&gt;-->
+    <!--<resultMap id="OrdersUserAndOrderDetailResultMap" type="com.sws.entity.Orders">-->
+        <!--&lt;!&ndash;订单信息&ndash;&gt;-->
+        <!--<id column="id" property="id"/>-->
+        <!--<result column="user_id" property="userId"/>-->
+        <!--<result column="number" property="number"/>-->
+        <!--<result column="createtime" property="createtime"/>-->
+        <!--<result column="note" property="note"/>-->
+        <!--&lt;!&ndash;用户信息&ndash;&gt;-->
+        <!--<association property="user" javaType="com.sws.entity.User">-->
+            <!--&lt;!&ndash;id:关联查询用户的唯一标识-->
+            <!--column:指定唯一标识用户信息的列-->
+            <!--property:映射到user的哪个属性&ndash;&gt;-->
+            <!--<id column="user_id" property="id"/>-->
+            <!--<result column="username" property="username"/>-->
+            <!--<result column="sex" property="sex"/>-->
+            <!--<result column="address" property="address"/>-->
+        <!--</association>-->
+        <!--&lt;!&ndash;订单明细，一个订单对应多个明细-->
+        <!--collection:关联查询多条记录映射到结果集中-->
+        <!--property:将关联查询到的多条记录映射到order属性中-->
+        <!--ofTYpe:指定映射到list集合属性中的pojo类型&ndash;&gt;-->
+        <!--<collection property="orderdetails" ofType="com.sws.entity.OrderDetails">-->
+            <!--<id property="id" column="orderdetail_id"/>-->
+            <!--<result column="item_id" property="itemId"/>-->
+            <!--<result column="item_name" property="itemName"/>-->
+            <!--<result column="orders_id" property="ordersId"/>-->
+        <!--</collection>-->
+    <!--</resultMap>-->
+
+    <!--订单及订单明细的resultMap
+    使用继承，不用配置订单信息以及用户信息-->
+    <resultMap id="OrdersUserAndOrderDetailResultMap" type="com.sws.entity.Orders" extends="OrdersUserResultMap">
+        <collection property="orderdetails" ofType="com.sws.entity.OrderDetails">
+            <id property="id" column="orderdetail_id"/>
+            <result column="item_id" property="itemId"/>
+            <result column="item_name" property="itemName"/>
+            <result column="orders_id" property="ordersId"/>
+        </collection>
+    </resultMap>
+
+    <!--查询用户及相关联商品信息-->
+    <resultMap id="UserAndItemsResultMap" type="com.sws.entity.User">
+        <!--用户信息-->
+        <id property="id" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="sex" column="sex"/>
+        <result property="address" column="address"/>
+        <!--订单信息
+        一个用户对应多个订单-->
+        <collection property="orderList" ofType="com.sws.entity.Orders">
+            <id column="id" property="id"/>
+            <result column="user_id" property="userId"/>
+            <result column="number" property="number"/>
+            <result column="createtime" property="createtime"/>
+            <result column="note" property="note"/>
+            <!--订单明细
+            一个订单多个明细-->
+            <collection property="orderdetails" ofType="com.sws.entity.OrderDetails">
+                <id property="id" column="orderdetail_id"/>
+                <result column="item_id" property="itemId"/>
+                <result column="item_name" property="itemName"/>
+                <result column="orders_id" property="ordersId"/>
+                <!--一个订单明细对于一个商品-->
+                <association property="items" javaType="com.sws.entity.Items">
+                    <!--id:关联查询用户的唯一标识
+                    column:指定唯一标识用户信息的列
+                    property:映射到user的哪个属性-->
+                    <id column="items_id" property="id"/>
+                    <result column="items_name" property="name"/>
+                    <result column="items_price" property="price"/>
+                    <result column="items_detail" property="detail"/>
+                </association>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <!--查询订单关联用户信息及用户明细-->
+    <select id="findOrdersUserAndOrderDetailResultMap" resultMap="OrdersUserAndOrderDetailResultMap">
+        select
+        orders.*,
+        user.username,
+        user.sex,
+        user.addressfrom,
+        orderdetail.id orderdetail_id
+        orderdetail.orders_id,
+        orderdetail.item_id,
+        orderdetail.item_name
+        from orders,user,orderdetail
+        where
+        orders.user_id = user.id
+        and
+        orderdetial.orders_id = orders.id
+    </select>
+
+    <!--查询用户及关联的商品信息-->
+    <select id="findUserAndItemsResultMap" resultMap="UserAndItemsResultMap">
+        select
+          orders.*,
+          user.username,
+          user.sex,
+          user.addressfrom,
+          orderdetail.id orderdetail_id
+          orderdetail.orders_id,
+          orderdetail.items_id,
+          orderdetail.items_name,
+          items.id items_id,
+          items.name items_name,
+          items.price item_price
+	from orders,user,orderdetail,items
+        where
+          orders.user_id = user.id
+        and
+          orderdetail.orders_id = orders.id
+        and
+          orderdetail.items_id = items.id
+    </select>
 </mapper>
