@@ -4,6 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--使用mappper代理方法，namespace有重要特殊作用-->
 <mapper namespace="com.sws.mapper.UserMapper">
+    <!--开启本mapper的namespace下的二级缓存
+    type:指定cache接口实现类型，mybatis默认实现类为PerpetualCache，
+    要和ehcahce整合，需要提供ehcache实现cache接口的实现类-->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
     <select id="findUserByID" parameterType="int" resultType="User">
           select * from user where id = #{id}
     </select>

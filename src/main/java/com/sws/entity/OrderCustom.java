@@ -1,7 +1,9 @@
 package com.sws.entity;
 
+import java.io.Serializable;
+
 //order订单扩展类
-public class OrderCustom extends Orders{
+public class OrderCustom extends Orders implements Serializable {
 
 
     //添加用户信息

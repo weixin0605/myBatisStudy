@@ -1,6 +1,8 @@
 package com.sws.entity;
 
-public class OrderDetails {
+import java.io.Serializable;
+
+public class OrderDetails implements Serializable {
     private String id;
     private String ordersId;
     private String itemId;

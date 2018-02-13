@@ -18,6 +18,15 @@
         <!--指定包名，mybatis自动扫描包，自动定义别名，别名为类名-->
         <package name="com.sws.entity"/>
     </typeAliases>
+    
+    <settings>
+        <!--打开延迟加载开关-->
+        <setting name="lazyLoadingEnable" value="true"/>
+        <!--积极加载变消极加载-->
+        <setting name="aggressiveLazyLoading" value="false"/>
+        <!--开启二级缓存-->
+        <setting name="cacheEnabale" value="true"/>
+    </settings>
 
     <environments default="development">
         <environment id="development">

@@ -1,9 +1,10 @@
 package com.sws.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
     //属性名与数据库相对应
     private int id;
     private String username;

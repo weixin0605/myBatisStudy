@@ -1,9 +1,10 @@
 package com.sws.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 //包装对象
-public class UserQueryVo {
+public class UserQueryVo implements Serializable {
     //包装所需要的查询条件
     //用户查询体条件
     private List<Integer> ids;
