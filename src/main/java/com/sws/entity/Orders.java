@@ -1,6 +1,7 @@
 package com.sws.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class Orders {
     private Integer id;
@@ -15,6 +16,17 @@ public class Orders {
 
     //添加用户信息
     private User user;
+
+    //订单明细
+    private List<OrderDetails> orderDetails;
+
+    public List<OrderDetails> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetails> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
 
     public User getUser() {
         return user;
